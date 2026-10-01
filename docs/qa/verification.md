@@ -18,6 +18,7 @@ These checks require Docker and are intentionally separate from the frontend-onl
 pnpm supabase:start
 pnpm supabase:status
 pnpm db:reset
+pnpm db:test
 pnpm db:types
 pnpm supabase:stop
 pnpm supabase:start
@@ -26,4 +27,6 @@ pnpm supabase:status
 
 The expected local API URL is `http://127.0.0.1:55321`. Status must emit a publishable key with an `sb_publishable_` prefix. Never paste status output into CI logs or documentation because it also contains local privileged credentials.
 
-`pnpm db:reset` is explicitly local-only. The successful reset must contain no Clauble product migration until an approved later-cycle schema specification exists. Regenerate and review `src/types/database.generated.ts` after every approved schema change.
+`pnpm db:reset`, `pnpm db:test`, and `pnpm db:types` are explicitly local-only. Database tests live under `supabase/tests/database` and run transactionally with pgTAP. Regenerate and review `src/types/database.generated.ts` after every approved schema change.
+
+Cycle 00D introduces the first product migration and only the `public.people` application table. A clean reset must reproduce it, the pgTAP suite must pass after reset, and a second reset/type-generation cycle must produce no unexpected type drift.

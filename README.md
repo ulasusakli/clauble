@@ -1,6 +1,6 @@
 # Clauble
 
-Clauble is a Next.js App Router application prepared for Supabase and Vercel. Cycles 00A–00B establish the repository and local Supabase workflow only; they intentionally contain no product schema, migrations, authentication flow, Launch, Signals, Workspace, or ranking logic.
+Clauble is a Next.js App Router application prepared for Supabase and Vercel. Cycles 00A–00C establish the application, local Supabase workflow, and authorization contracts. Cycle 00D introduces the first product schema: the `public.people` identity/profile table only. Authentication UI, Launch, Companies, Signals, Workspace, and ranking remain unimplemented.
 
 ## Requirements
 
@@ -43,11 +43,12 @@ The CLI is pinned in this repository. Do not rely on a global installation.
 pnpm supabase:start
 pnpm supabase:status
 pnpm db:reset
+pnpm db:test
 pnpm db:types
 pnpm supabase:stop
 ```
 
-`db:reset` always includes `--local`; it cannot reset a linked remote project. `db:types` generates `src/types/database.generated.ts` from the running local database. Do not edit that file by hand. The Supabase config uses project-specific `5532x` ports so it can coexist with other local Supabase projects.
+`db:reset` and `db:test` always include `--local`; they cannot reset or test a linked remote project. `db:types` generates `src/types/database.generated.ts` from the running local database. Do not edit that file by hand. The Supabase config uses project-specific `5532x` ports so it can coexist with other local Supabase projects.
 
 ## Environment isolation
 

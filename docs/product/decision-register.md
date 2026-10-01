@@ -23,14 +23,15 @@ Status values are `ACCEPTED`, `OPEN`, and `SUPERSEDED`. This register records pr
 | C00C-017 | ACCEPTED | Premium entitlements must never modify organic ranking. | Paid capabilities and ranking inputs must remain structurally separate. |
 | C00C-018 | ACCEPTED | Historical public memberships and Signal authorship are retained. | Leaving/removal changes lifecycle state; it does not physically delete history. |
 | C00C-019 | ACCEPTED | `invitation.view` and `invitation.manage` are additional canonical permissions. | Owner and Admin receive them; invitation workflows do not rely on incidental membership/access permissions. |
-| C00C-020 | OPEN | Should a suspended Person profile remain publicly visible, become unavailable, or show a limited tombstone? | Public `people` SELECT policy cannot be finalized until moderation/product behavior is approved. |
-| C00C-021 | OPEN | Which mechanism performs safe self-service Person profile updates: column grants + RLS, controlled RPC, or trusted server mutation? | Prefer the simplest reviewed design that prevents platform-field writes; compare options in ADR 0003. |
-| C00C-022 | OPEN | Should the long-term client API use `public` directly or a dedicated exposed `api` schema over private domain tables? | Current local config exposes `public`; no schema exposure change is made in Cycle 00C. |
+| C00C-020 | ACCEPTED | Non-active People are excluded from public visibility; an authenticated user may still read their own Person row. | Suspended, deactivated, and deleted rows remain hidden from other users while future account/status UI can inspect the owner's state. |
+| C00C-021 | ACCEPTED | Safe direct Data API profile mutation uses database column privileges plus RLS; application/server validation remains an additional layer. | Authenticated users can write only approved profile columns and only their own row. |
+| C00C-022 | ACCEPTED | Use the `public` schema for V1 product tables with explicit grants and RLS. | Reconsider a dedicated `api` schema if API surface complexity makes `public` difficult to audit. |
 | C00C-023 | OPEN | What are the exact global platform roles, scopes, and approval rules for Moderator, Membership Admin, and Super Admin? | Actor scenarios are specified, but no platform-admin tables or bypass mechanism are approved. |
 | C00C-024 | OPEN | Which structurally valid public-role + panel-role combinations will V1 UX allow? | The data model permits combinations such as Founder + None and Member + Admin; workflows may present a narrower set. |
 | C00C-025 | OPEN | What are invitation expiry duration, resend behavior, and uniqueness rules for multiple pending invitations? | Security invariants are frozen; timing and UX are deferred. |
 | C00C-026 | OPEN | Are Signal drafts and revisions one table or separate tables? | The conceptual ERD includes `signal_revisions`; a Signal migration specification must settle physical storage. |
 | C00C-027 | OPEN | What are Company suspension and deletion retention/public-visibility semantics? | Mutations are denied while suspended; read/tombstone and archival behavior need product approval. |
+| C00D-001 | OPEN | Which usernames are reserved for routes, system identities, brands, or abuse prevention? | The database enforces canonical syntax and uniqueness only; reserved-name handling requires a future product list/workflow. |
 
 ## Documentation reconciliation
 

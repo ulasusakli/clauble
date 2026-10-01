@@ -2,10 +2,23 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
 
 export type Database = {
-  
+
   "public": {
           Tables: {
-            [_ in never]: never
+            "people": {
+                  Row: {
+                    "avatar_path": string | null,"bio": string | null,"created_at": string,"display_name": string,"headline": string | null,"id": string,"profile_completed_at": string | null,"status": Database["public"]['Enums']["person_status"],"updated_at": string,"username": string,"website_url": string | null
+                  }
+                  Insert: {
+                    "avatar_path"?: string | null,"bio"?: string | null,"created_at"?: string,"display_name": string,"headline"?: string | null,"id": string,"profile_completed_at"?: string | null,"status"?: Database["public"]['Enums']["person_status"],"updated_at"?: string,"username": string,"website_url"?: string | null
+                  }
+                  Update: {
+                    "avatar_path"?: string | null,"bio"?: string | null,"created_at"?: string,"display_name"?: string,"headline"?: string | null,"id"?: string,"profile_completed_at"?: string | null,"status"?: Database["public"]['Enums']["person_status"],"updated_at"?: string,"username"?: string,"website_url"?: string | null
+                  }
+                  Relationships: [
+
+                  ]
+                }
           }
           Views: {
             [_ in never]: never
@@ -14,7 +27,7 @@ export type Database = {
             [_ in never]: never
           }
           Enums: {
-            [_ in never]: never
+            "person_status": "active"|"suspended"|"deactivated"|"deleted"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -130,7 +143,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            
+            "person_status": ["active", "suspended", "deactivated", "deleted"]
           }
         }
 } as const

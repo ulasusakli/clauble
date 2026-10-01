@@ -1,13 +1,13 @@
 # Conceptual V1 data model
 
-**Implemented now: none. Everything in this document is future schema.** This is a dependency and ownership model, not a migration blueprint.
+**Implemented now: `public.people` and `public.person_status` only. Everything else in this document is future schema.** This remains a dependency and ownership model, not permission to implement later entities early.
 
 ## Core entity contracts
 
 | Entity | Purpose and key conceptual rules |
 | --- | --- |
 | `auth.users` | Supabase-owned canonical authentication identity. |
-| `people` | Public Clauble identity; one-to-one with `auth.users`, normally same UUID; states `active`, `suspended`, `deactivated`, `deleted`; route `/u/{username}`. |
+| `people` | **Implemented in Cycle 00D.** Public Clauble identity; zero-or-one Person per `auth.users` row with the same UUID; states `active`, `suspended`, `deactivated`, `deleted`; route `/u/{username}`. Auth deletion is restricted while the Person exists. |
 | `companies` | Public Company identity; states `draft`, `active`, `suspended`, `deletion_pending`, `archived`; route `/c/{slug}`. |
 | `company_memberships` | Public Person–Company history; roles `Founder`, `Member`; states `active`, `left`, `removed`; never `invited`. Conceptual fields: `id`, `company_id`, `person_id`, `public_role`, `job_title`, `state`, `starts_at`, `ends_at`, `created_at`, `created_by`. |
 | `company_panel_access` | Private authorization; roles `Owner`, `Admin`, `Editor`, `Analyst`; states `active`, `revoked`; absent active row means no access. Conceptual fields: `id`, `company_id`, `person_id`, `panel_role`, `state`, `granted_by`, `granted_at`, `revoked_by`, `revoked_at`. |

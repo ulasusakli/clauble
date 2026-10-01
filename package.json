@@ -19,6 +19,7 @@
     "supabase:stop": "supabase stop",
     "supabase:status": "supabase status",
     "db:reset": "supabase db reset --local",
+    "db:test": "supabase test db --local supabase/tests/database",
     "db:types": "supabase gen types typescript --local --schema public > src/types/database.generated.ts",
     "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm test:e2e"
   },
