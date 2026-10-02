@@ -2,6 +2,12 @@ import { defineConfig, devices } from "@playwright/test";
 
 const externalBaseUrl = process.env.PLAYWRIGHT_BASE_URL;
 const baseURL = externalBaseUrl ?? "http://127.0.0.1:3100";
+const testEnvironment = {
+  NEXT_PUBLIC_SUPABASE_URL:
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "http://127.0.0.1:55321",
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "sb_publishable_playwright_placeholder",
+};
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -24,9 +30,9 @@ export default defineConfig({
     ? undefined
     : {
         command: "pnpm dev --hostname 127.0.0.1 --port 3100",
+        env: testEnvironment,
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
       },
 });
-

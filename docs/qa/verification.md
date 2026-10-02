@@ -8,7 +8,9 @@ pnpm verify
 
 It runs ESLint, strict TypeScript checking, Vitest, a production Next.js build, and Playwright smoke tests. Playwright starts a local server unless `PLAYWRIGHT_BASE_URL` points at an already deployed environment.
 
-The smoke suite verifies the minimal shell at `/` and the liveness response at `/api/health`.
+The default browser suite verifies the public shell, liveness, auth form behavior, safe confirmation failures, protected-route redirects, and redirect sanitization.
+
+Cycle 01A adds an opt-in live local Auth/Mailpit test documented in `authentication-tests.md`. Run it only with the local Supabase stack and the app on `http://localhost:3000`; the default `pnpm verify` remains deterministic without creating Auth users.
 
 ## Local Supabase verification
 

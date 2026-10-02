@@ -8,10 +8,8 @@ describe("HomePage", () => {
     render(<HomePage />);
 
     expect(screen.getByRole("heading", { name: "Clauble" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "View service status" })).toHaveAttribute(
-      "href",
-      "/api/health",
-    );
+    expect(screen.getByText("Public Discovery")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Create account" })).toHaveAttribute("href", "/signup");
+    expect(screen.getByRole("link", { name: "Log in" })).toHaveAttribute("href", "/login");
   });
 });
-

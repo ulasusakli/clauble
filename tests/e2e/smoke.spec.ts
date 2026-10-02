@@ -4,7 +4,7 @@ test("renders the Clauble shell", async ({ page }) => {
   await page.goto("/");
 
   await expect(page.getByRole("heading", { name: "Clauble" })).toBeVisible();
-  await expect(page.getByText("Cycle 00A")).toBeVisible();
+  await expect(page.getByText("Public Discovery")).toBeVisible();
 });
 
 test("reports service health", async ({ request }) => {
@@ -16,4 +16,3 @@ test("reports service health", async ({ request }) => {
     status: "ok",
   });
 });
-

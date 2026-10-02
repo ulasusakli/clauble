@@ -32,6 +32,12 @@ Status values are `ACCEPTED`, `OPEN`, and `SUPERSEDED`. This register records pr
 | C00C-026 | OPEN | Are Signal drafts and revisions one table or separate tables? | The conceptual ERD includes `signal_revisions`; a Signal migration specification must settle physical storage. |
 | C00C-027 | OPEN | What are Company suspension and deletion retention/public-visibility semantics? | Mutations are denied while suspended; read/tombstone and archival behavior need product approval. |
 | C00D-001 | OPEN | Which usernames are reserved for routes, system identities, brands, or abuse prevention? | The database enforces canonical syntax and uniqueness only; reserved-name handling requires a future product list/workflow. |
+| C01A-001 | ACCEPTED | V1 authentication uses email and password only. | OAuth, magic links, phone auth, anonymous auth, passkeys, SSO, and MFA are deferred. |
+| C01A-002 | ACCEPTED | Email confirmation is required. | Local Auth models production with repository-managed PKCE token-hash templates. |
+| C01A-003 | ACCEPTED | SSR uses `@supabase/ssr` cookie sessions and PKCE-compatible email exchanges. | Server clients are request-scoped; Proxy refreshes sessions but is not authorization. |
+| C01A-004 | ACCEPTED | Auth account creation does not create a Person. | `auth.users` may exist without `public.people`; Cycle 01B owns profile creation. |
+| C01A-005 | ACCEPTED | Post-auth routing is missing Person to `/onboarding/profile`, active Person to `/`, and non-active Person to `/account/restricted`. | Account state is read through the authenticated user's RLS context. |
+| C01A-006 | ACCEPTED | OAuth and MFA are deferred beyond Cycle 01A. | Deployment abuse controls and later authentication methods require separate specifications. |
 
 ## Documentation reconciliation
 
