@@ -3,13 +3,13 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path = public, extensions;
 
-select plan(18);
+select plan(29);
 
 insert into auth.users (id, email)
 select
   ('10000000-0000-0000-0000-' || lpad(value::text, 12, '0'))::uuid,
   'constraint-' || value || '@example.test'
-from generate_series(1, 20) as value;
+from generate_series(1, 30) as value;
 
 select lives_ok(
   $$insert into public.people (id, username, display_name)
@@ -39,6 +39,12 @@ select lives_ok(
   $$insert into public.people (id, username, display_name)
     values ('10000000-0000-0000-0000-000000000005', repeat('a', 30), 'Maximum')$$,
   'thirty-character username boundary is valid'
+);
+
+select ok(
+  (select profile_completed_at is not null from public.people
+    where id = '10000000-0000-0000-0000-000000000001'),
+  'profile completion timestamp is set automatically'
 );
 
 select throws_ok(
@@ -155,6 +161,72 @@ select throws_ok(
   '23503',
   null,
   'auth identity deletion cannot silently erase a Person'
+);
+
+select throws_ok(
+  $$insert into public.people (id, username, display_name)
+    values ('10000000-0000-0000-0000-000000000021', 'admin', 'Admin')$$,
+  '23514',
+  null,
+  'admin is reserved'
+);
+select throws_ok(
+  $$insert into public.people (id, username, display_name)
+    values ('10000000-0000-0000-0000-000000000022', 'clauble', 'Clauble')$$,
+  '23514',
+  null,
+  'clauble is reserved'
+);
+select throws_ok(
+  $$insert into public.people (id, username, display_name)
+    values ('10000000-0000-0000-0000-000000000023', 'support', 'Support')$$,
+  '23514',
+  null,
+  'support is reserved'
+);
+select throws_ok(
+  $$insert into public.people (id, username, display_name)
+    values ('10000000-0000-0000-0000-000000000024', 'login', 'Login')$$,
+  '23514',
+  null,
+  'login is reserved'
+);
+select throws_ok(
+  $$insert into public.people (id, username, display_name)
+    values ('10000000-0000-0000-0000-000000000025', 'signals', 'Signals')$$,
+  '23514',
+  null,
+  'signals is reserved'
+);
+select throws_ok(
+  $$insert into public.people (id, username, display_name)
+    values ('10000000-0000-0000-0000-000000000026', 'workspace', 'Workspace')$$,
+  '23514',
+  null,
+  'workspace is reserved'
+);
+select throws_ok(
+  $$insert into public.people (id, username, display_name)
+    values ('10000000-0000-0000-0000-000000000027', 'www', 'WWW')$$,
+  '23514',
+  null,
+  'www is reserved'
+);
+
+select lives_ok(
+  $$insert into public.people (id, username, display_name)
+    values ('10000000-0000-0000-0000-000000000028', 'hiyelx', 'Hiyelx')$$,
+  'hiyelx remains available'
+);
+select lives_ok(
+  $$insert into public.people (id, username, display_name)
+    values ('10000000-0000-0000-0000-000000000029', 'robotics_01', 'Robotics')$$,
+  'robotics_01 remains available'
+);
+select lives_ok(
+  $$insert into public.people (id, username, display_name)
+    values ('10000000-0000-0000-0000-000000000030', 'startup123', 'Startup')$$,
+  'startup123 remains available'
 );
 
 select * from finish();

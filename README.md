@@ -1,6 +1,6 @@
 # Clauble
 
-Clauble is a Next.js App Router application prepared for Supabase and Vercel. Cycles 00A–00D establish the application, local Supabase workflow, authorization contracts, and the single `public.people` product table. Cycle 01A adds Supabase Auth email/password flows and cookie-based Next.js SSR sessions. Profile completion, Launch, Companies, Signals, Workspace, and ranking remain unimplemented.
+Clauble is a Next.js App Router application prepared for Supabase and Vercel. Cycles 00A–00D establish the application, local Supabase workflow, authorization contracts, and the single `public.people` product table. Cycle 01A adds Supabase Auth email/password flows and cookie-based Next.js SSR sessions. Cycle 01B adds deliberate People profile completion and active-only public `/u/{username}` pages. Cycle 01C adds `/settings/profile`, immediate policy-bound username changes, and owner-protected public avatar Storage. Launch, Companies, Signals, Workspace, and ranking remain unimplemented.
 
 ## Requirements
 
@@ -21,7 +21,7 @@ After the stack starts, run `pnpm supabase:status` and copy the local publishabl
 
 The publishable key identifies a public application client; database grants and Row Level Security still protect data. Never place a Supabase secret key or legacy service-role key in a `NEXT_PUBLIC_` variable.
 
-Public Discovery remains available at `/`. Auth routes begin at `/signup` and `/login`; confirmed users without a Person are sent to the Cycle 01B placeholder at `/onboarding/profile`. The liveness endpoint is `GET /api/health`.
+Public Discovery remains available at `/`. Auth routes begin at `/signup` and `/login`; confirmed users without a Person complete a deliberate profile at `/onboarding/profile`. Active People are public at `/u/{username}` and manage their profile and avatar at `/settings/profile`. The liveness endpoint is `GET /api/health`.
 
 Local Auth requires email confirmation. Mailpit captures confirmation and recovery messages; discover its URL with `pnpm supabase:status`. Repository-managed templates live in `supabase/templates/`.
 

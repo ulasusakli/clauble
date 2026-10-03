@@ -26,7 +26,18 @@ test("anonymous access to profile onboarding redirects to login", async ({ reque
   expect(response.headers().location).toContain("/login?next=%2Fonboarding%2Fprofile");
 });
 
+test("anonymous access to profile settings redirects to login", async ({ request }) => {
+  const response = await request.get("/settings/profile", { maxRedirects: 0 });
+  expect(response.status()).toBe(307);
+  expect(response.headers().location).toContain("/login?next=/settings/profile");
+});
+
 test("external next values never survive the login form", async ({ page }) => {
   await page.goto("/login?next=https://attacker.example/collect");
   await expect(page.locator('input[name="next"]')).toHaveValue("/");
+});
+
+test("invalid public username syntax returns not found without a lookup", async ({ request }) => {
+  const response = await request.get("/u/not-valid");
+  expect(response.status()).toBe(404);
 });

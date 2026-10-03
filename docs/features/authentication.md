@@ -14,7 +14,8 @@ Cycle 01A implements Supabase Auth email/password flows through Next.js SSR.
 | `/auth/error` | User-safe invalid/expired-link response |
 | `/auth/signout` | POST-only logout |
 | `/reset-password` | Recovery-session-only password update |
-| `/onboarding/profile` | Cycle 01B placeholder for missing Person |
+| `/onboarding/profile` | Authenticated Cycle 01B profile completion for a missing Person |
+| `/settings/profile` | Active-Person profile and avatar management |
 | `/account/restricted` | Minimal non-active Person destination |
 
 ## Local configuration

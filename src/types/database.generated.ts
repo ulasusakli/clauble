@@ -7,13 +7,13 @@ export type Database = {
           Tables: {
             "people": {
                   Row: {
-                    "avatar_path": string | null,"bio": string | null,"created_at": string,"display_name": string,"headline": string | null,"id": string,"profile_completed_at": string | null,"status": Database["public"]['Enums']["person_status"],"updated_at": string,"username": string,"website_url": string | null
+                    "avatar_path": string | null,"bio": string | null,"created_at": string,"display_name": string,"headline": string | null,"id": string,"profile_completed_at": string,"status": Database["public"]['Enums']["person_status"],"updated_at": string,"username": string,"website_url": string | null
                   }
                   Insert: {
-                    "avatar_path"?: string | null,"bio"?: string | null,"created_at"?: string,"display_name": string,"headline"?: string | null,"id": string,"profile_completed_at"?: string | null,"status"?: Database["public"]['Enums']["person_status"],"updated_at"?: string,"username": string,"website_url"?: string | null
+                    "avatar_path"?: string | null,"bio"?: string | null,"created_at"?: string,"display_name": string,"headline"?: string | null,"id": string,"profile_completed_at"?: string,"status"?: Database["public"]['Enums']["person_status"],"updated_at"?: string,"username": string,"website_url"?: string | null
                   }
                   Update: {
-                    "avatar_path"?: string | null,"bio"?: string | null,"created_at"?: string,"display_name"?: string,"headline"?: string | null,"id"?: string,"profile_completed_at"?: string | null,"status"?: Database["public"]['Enums']["person_status"],"updated_at"?: string,"username"?: string,"website_url"?: string | null
+                    "avatar_path"?: string | null,"bio"?: string | null,"created_at"?: string,"display_name"?: string,"headline"?: string | null,"id"?: string,"profile_completed_at"?: string,"status"?: Database["public"]['Enums']["person_status"],"updated_at"?: string,"username"?: string,"website_url"?: string | null
                   }
                   Relationships: [
 

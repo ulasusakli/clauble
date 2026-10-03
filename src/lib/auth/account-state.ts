@@ -31,6 +31,19 @@ export function getPostAuthDestination(state: AccountState, requestedPath?: stri
   }
 }
 
+export function getProfileOnboardingDestination(state: AccountState): Route | null {
+  switch (state.kind) {
+    case "anonymous":
+      return "/login?next=/onboarding/profile";
+    case "profile_required":
+      return null;
+    case "restricted":
+      return "/account/restricted";
+    case "active":
+      return `/u/${encodeURIComponent(state.username)}` as Route;
+  }
+}
+
 export async function resolveAccountState(
   supabase: SupabaseClient<Database>,
   userId: string | null,

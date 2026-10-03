@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path = public, extensions;
 
-select plan(26);
+select plan(29);
 
 insert into auth.users (id, email)
 values
@@ -144,18 +144,22 @@ select set_config(
 
 select lives_ok(
   $$insert into public.people (
-      id, username, display_name, headline, bio, avatar_path, website_url, profile_completed_at
+      id, username, display_name, headline, bio, avatar_path, website_url
     ) values (
       '20000000-0000-0000-0000-000000000003',
       'user_c',
       'User C',
       'Headline',
       'Bio',
-      'avatars/user-c.png',
-      'https://example.test',
-      now()
+      '20000000-0000-0000-0000-000000000003/30000000-0000-4000-8000-000000000003.png',
+      'https://example.test'
     )$$,
   'user C can create exactly their own Person with safe columns'
+);
+select ok(
+  (select profile_completed_at is not null from public.people
+    where id = '20000000-0000-0000-0000-000000000003'),
+  'database sets profile_completed_at for authenticated insert'
 );
 
 reset role;
@@ -230,6 +234,18 @@ select throws_ok(
   null,
   'authenticated user cannot choose updated_at during creation'
 );
+select throws_ok(
+  $$insert into public.people (id, username, display_name, profile_completed_at)
+    values (
+      '20000000-0000-0000-0000-000000000008',
+      'controlled_user',
+      'Controlled User',
+      '2000-01-01'
+    )$$,
+  '42501',
+  null,
+  'authenticated user cannot choose profile_completed_at during creation'
+);
 
 reset role;
 set local role authenticated;
@@ -267,6 +283,13 @@ select throws_ok(
   '42501',
   null,
   'authenticated user cannot alter updated_at directly'
+);
+select throws_ok(
+  $$update public.people set profile_completed_at = now()
+    where id = '20000000-0000-0000-0000-000000000001'$$,
+  '42501',
+  null,
+  'authenticated user cannot alter profile_completed_at'
 );
 
 select * from finish();

@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path = public, extensions;
 
-select plan(54);
+select plan(57);
 
 select has_table('public', 'people', 'public.people exists');
 
@@ -95,6 +95,25 @@ select is(
   'updated_at defaults to now()'
 );
 
+select is(
+  (
+    select column_default
+    from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'people'
+      and column_name = 'profile_completed_at'
+  ),
+  'now()',
+  'profile_completed_at defaults to now()'
+);
+
+select col_not_null(
+  'public',
+  'people',
+  'profile_completed_at',
+  'profile_completed_at is required after profile creation'
+);
+
 select col_is_pk('public', 'people', 'id', 'id is the primary key');
 
 select ok(
@@ -140,6 +159,17 @@ select ok(
       and contype = 'c'
   ),
   'username format constraint exists'
+);
+
+select ok(
+  exists (
+    select 1
+    from pg_constraint
+    where conrelid = 'public.people'::regclass
+      and conname = 'people_username_not_reserved_check'
+      and contype = 'c'
+  ),
+  'reserved username constraint exists'
 );
 
 select has_index(
@@ -214,8 +244,8 @@ select ok(
   'authenticated may provide display_name on INSERT'
 );
 select ok(
-  has_column_privilege('authenticated', 'public.people', 'profile_completed_at', 'INSERT'),
-  'authenticated may provide profile_completed_at on INSERT'
+  not has_column_privilege('authenticated', 'public.people', 'profile_completed_at', 'INSERT'),
+  'authenticated cannot provide profile_completed_at on INSERT'
 );
 select ok(
   not has_column_privilege('authenticated', 'public.people', 'status', 'INSERT'),
@@ -239,8 +269,8 @@ select ok(
   'authenticated may update display_name'
 );
 select ok(
-  has_column_privilege('authenticated', 'public.people', 'profile_completed_at', 'UPDATE'),
-  'authenticated may update profile_completed_at'
+  not has_column_privilege('authenticated', 'public.people', 'profile_completed_at', 'UPDATE'),
+  'authenticated cannot update profile_completed_at'
 );
 select ok(
   not has_column_privilege('authenticated', 'public.people', 'id', 'UPDATE'),

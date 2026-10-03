@@ -1,25 +1,25 @@
 import { redirect } from "next/navigation";
 
 import { AuthShell } from "@/components/auth/auth-shell";
-import { getPostAuthDestination, resolveAccountState } from "@/lib/auth/account-state";
+import { ProfileCompletionForm } from "@/components/people/profile-completion-form";
+import { getProfileOnboardingDestination, resolveAccountState } from "@/lib/auth/account-state";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function ProfileOnboardingPage() {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getClaims();
-  const userId = error ? null : data?.claims?.sub;
-  if (!userId) redirect("/login?next=/onboarding/profile");
-
+  const userId = error ? null : (data?.claims?.sub ?? null);
   const state = await resolveAccountState(supabase, userId);
-  if (state.kind !== "profile_required") redirect(getPostAuthDestination(state));
+  const destination = getProfileOnboardingDestination(state);
+  if (destination) redirect(destination);
 
   return (
     <AuthShell
-      eyebrow="Cycle 01A"
-      title="Profile setup comes next"
-      description="Your email is confirmed and your session is active. Cycle 01B will add deliberate username and profile creation here."
+      title="Complete your Clauble profile"
+      description="Choose how you will appear publicly. You can add more profile details later."
+      footer={<form action="/auth/signout" method="post"><button className="text-link" type="submit">Log out</button></form>}
     >
-      <form action="/auth/signout" method="post"><button type="submit">Log out</button></form>
+      <ProfileCompletionForm />
     </AuthShell>
   );
 }
